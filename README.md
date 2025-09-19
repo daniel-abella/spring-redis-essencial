@@ -105,12 +105,19 @@ GET "books::SimpleKey []"   # Mostra o conteúdo em cache (modo binário por pad
 ### ❗ Para visualização legível: use JSON como serializador
 
 ```java
-@Bean
-public RedisCacheConfiguration cacheConfiguration() {
-    return RedisCacheConfiguration.defaultCacheConfig()
-        .serializeValuesWith(
-            RedisSerializationContext.SerializationPair.fromSerializer(new GenericJackson2JsonRedisSerializer())
-        );
+@Configuration
+public class RedisConfig {
+
+    @Bean
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(60))
+            .serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(
+                    new GenericJackson2JsonRedisSerializer()
+                )
+            );
+    }
 }
 ```
 
