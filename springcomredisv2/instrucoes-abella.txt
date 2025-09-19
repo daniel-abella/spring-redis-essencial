@@ -1,0 +1,38 @@
+Rodar o Redis do Docker
+
+Verifique se o Docker Desktop está instalado no Windows.
+docker run --name redis -p 6379:6379 -d redis
+docker stop redis
+
+spring.cache.type=redis
+spring.redis.host=localhost
+spring.redis.port=6379
+
+Se tiver o Redis CLI instalado:
+
+redis-cli
+
+docker exec -it redis redis-cli
+
+KEYS *
+GET book::1
+GET "books::SimpleKey []"
+
+O Spring cria chaves como book::1, books, etc.
+
+Se quiser usar JSON como formato de serialização, basta criar a RedisConfig
+
+@Configuration
+public class RedisConfig {
+
+    @Bean
+    public RedisCacheConfiguration cacheConfiguration() {
+        return RedisCacheConfiguration.defaultCacheConfig()
+            .entryTtl(Duration.ofMinutes(60))
+            .serializeValuesWith(
+                RedisSerializationContext.SerializationPair.fromSerializer(
+                    new GenericJackson2JsonRedisSerializer()
+                )
+            );
+    }
+}

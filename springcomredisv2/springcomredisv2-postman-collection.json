@@ -1,0 +1,129 @@
+{
+  "info": {
+    "name": "Book API with Redis Cache",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "item": [
+    {
+      "name": "GET - Todos os livros (com cache)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/books",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "books"
+          ]
+        },
+        "description": "Na primeira chamada, os dados v\u00eam do banco (log mostra isso). Nas pr\u00f3ximas, o retorno vir\u00e1 do Redis (sem nova consulta ao banco)."
+      }
+    },
+    {
+      "name": "GET - Livro por ID (com cache)",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "books",
+            "1"
+          ]
+        },
+        "description": "Na primeira chamada, busca o livro no banco; nas pr\u00f3ximas, o valor \u00e9 retornado do cache Redis (chave book::1)."
+      }
+    },
+    {
+      "name": "POST - Criar livro",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Clean Architecture\",\n  \"author\": \"Robert C. Martin\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/books",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "books"
+          ]
+        },
+        "description": "Cria um novo livro. Limpa o cache de 'books'."
+      }
+    },
+    {
+      "name": "PUT - Atualizar livro",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"title\": \"Clean Architecture - Updated\",\n  \"author\": \"Uncle Bob\"\n}"
+        },
+        "url": {
+          "raw": "http://localhost:8080/api/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "books",
+            "1"
+          ]
+        },
+        "description": "Atualiza livro com ID 1. Atualiza a entrada no cache book::1 e limpa 'books'."
+      }
+    },
+    {
+      "name": "DELETE - Excluir livro",
+      "request": {
+        "method": "DELETE",
+        "header": [],
+        "url": {
+          "raw": "http://localhost:8080/api/books/1",
+          "protocol": "http",
+          "host": [
+            "localhost"
+          ],
+          "port": "8080",
+          "path": [
+            "api",
+            "books",
+            "1"
+          ]
+        },
+        "description": "Remove o livro do banco e do cache (book::1 e books)."
+      }
+    }
+  ]
+}
